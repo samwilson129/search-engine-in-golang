@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Engine</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('/static/custom_background.gif'); 
+            background-repeat: no-repeat;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .search-container {
+            background-color: rgba(255, 255, 255, 0.5); 
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            margin: 20px;
+            display: flex;
+            flex-direction: column; 
+        }
+
+        h1 {
+            color: #9d00ff;
+            margin-bottom: 20px;
+            font-size: 36px;
+            font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            margin: 0 10px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            align-self: flex-end; 
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .image-holder {
+            margin-top: 20px; 
+            text-align: center;
+        }
+
+        .image-holder img {
+            max-width: 100px; 
+            max-height: 100px; 
+            border: 5px solid #ddd;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); 
+        }
+
+        .speaker {
+            position: fixed; 
+            bottom: 20px; 
+            left: 20px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999; 
+        }
+
+        .speaker button {
+            border: transparent;
+            padding: 0.5rem;
+            background-color: transparent;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="search-container">
+        <h1>GO-ON</h1>
+        <form id="searchForm" action="/" method="post">
+            <input type="text" id="searchBox" name="query" placeholder="Enter your search query">
+            <input type="submit" value="Search">
+        </form>
+    </div>
+    
+    <div class="image-holder" id="imagePlaceholder">
+        <img src="/static/idle_chop.gif" alt="Idle Chop" id="placeholderImage"> 
+    </div>
+    
+    <div class="speaker">
+        <button onclick="runSpeechRecog()">
+           <img src="/static/voice.jpg" alt="Microphone" style="width: 80px;height: 80px;">
+        </button>
+    </div>
+    <h3 id="output" class="hide"></h3>
+    
+    <script>
+        var searchBox = document.getElementById('searchBox');
+        var placeholderImage = document.getElementById('placeholderImage');
+        var isListening = false;
+
+        searchBox.addEventListener('input', function() {
+            if (searchBox.value.trim() === '') {
+                placeholderImage.src = '/static/idle_chop.gif'; 
+            } else {
+                placeholderImage.src = '/static/dancing_chop.gif'; 
+            }
+        });
+
+        function runSpeechRecog() {
+            var output = document.getElementById('output');
+            let recognition = new webkitSpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.onstart = function() {
+                isListening = true;
+                placeholderImage.src = '/static/eating_chop.gif'; 
+            };
+            recognition.onresult = (e) => {
+               var transcript = e.results[0][0].transcript;
+               searchBox.value = transcript;
+            };
+            recognition.onend = function() {
+                isListening = false;
+                placeholderImage.src = '/static/idle_chop.gif'; 
+            };
+            if (!isListening) {
+                recognition.start();
+            } else {
+                recognition.stop();
+            }
+         }
+    </script>
+</body>
+</html>
