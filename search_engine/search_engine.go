@@ -13,8 +13,8 @@ import (
 	"google.golang.org/api/option"
 )
 
-var apiKey = "AIzaSyC_1FL1-QsEKFr7IoeajLiWICEvd7Y-VWE"
-var customSearchID = "3324b3fe8b5594718"
+var apiKey = "xxx"
+var customSearchID = "xxx"
 
 func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
